@@ -70,7 +70,7 @@ export default function FileUpload() {
       const token = localStorage.getItem("token"); //grab the save token
       xhr.open("POST", "http://localhost:5000/files/upload", true);
 
-      if(token) {
+      if (token) {
         xhr.setRequestHeader("Authorization", `Bearer ${token}`);
       }
 
@@ -142,7 +142,8 @@ export default function FileUpload() {
         className="w-full max-w-lg bg-white/10 backdrop-blur-lg rounded-2xl shadow-2xl border border-white/20 p-8"
       >
         <h2 className="text-2xl font-bold mb-6 text-center">
-          Upload Your File
+          {file || uploadedFile ? "Your Uploaded File" : "Upload Your File"}
+        
         </h2>
 
         {/* Error Alert */}
@@ -153,8 +154,10 @@ export default function FileUpload() {
           </div>
         )}
 
+        
+
         {/* Upload Box */}
-        {!success && (
+        {!file && !uploadedFile && !success && (
           <label
             htmlFor="file-input"
             className="flex flex-col items-center justify-center cursor-pointer border-2 border-dashed border-gray-400 hover:border-blue-400 transition-colors rounded-xl py-10 px-6 bg-gray-800/50 hover:bg-gray-800/70"

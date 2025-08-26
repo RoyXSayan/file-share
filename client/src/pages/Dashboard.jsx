@@ -9,7 +9,7 @@ import {
   Trash2,
   Lock,
   Download,
-  QrCode
+  QrCode,
 } from "lucide-react";
 import { FaWhatsapp, FaTelegram, FaEnvelope } from "react-icons/fa";
 import { useEffect, useState } from "react";
@@ -422,13 +422,57 @@ export default function Dashboard() {
                     )}
                   </div>
 
+                  {/* Download button */}
+                  <Button
+                    onClick={async () => {
+                      try {
+                        const res = await fetch(
+                          `http://localhost:5000/files/download/${selectedFile._id}`,
+                          {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: selectedFile.hasPassword
+                              ? JSON.stringify({ password })
+                              : null,
+                          }
+                        );
+                        const data = await res.json();
+                        if (data.success) {
+                          window.open(data.file.url, "_blank");
+                          setRecentUploads((prev) =>
+                            prev.map((f) =>
+                              f._id === selectedFile._id
+                                ? { ...f, downloads: (f.downloads || 0) + 1 }
+                                : f
+                            )
+                          );
+                          setSelectedFile((prev) =>
+                            prev
+                              ? {
+                                  ...prev,
+                                  downloads: (prev.downloads || 0) + 1,
+                                }
+                              : prev
+                          );
+                        } else {
+                          toast.error(data.message || "Download Failed");
+                        }
+                      } catch (error) {
+                        toast.error("Download Failed", error);
+                      }
+                    }}
+                    className="w-full"
+                  >
+                    <Download className="w-4 h-4 mr-2" /> Download
+                  </Button>
+
                   {/* Show QR button */}
                   <Button
                     variant="outline"
                     className="w-full"
                     onClick={() => setQrOpen(true)}
                   >
-                    Show QR Code <QrCode className="mt-0.5"/>
+                    Show QR Code <QrCode className="mt-0.5" />
                   </Button>
 
                   <div className="text-center w-full">
@@ -449,50 +493,6 @@ export default function Dashboard() {
                         <Copy className="w-4 h-4 text-slate-600 dark:text-slate-300" />
                       </button>
                     </div>
-
-                    {/* Download button */}
-                    <Button
-                      onClick={async () => {
-                        try {
-                          const res = await fetch(
-                            `http://localhost:5000/files/download/${selectedFile._id}`,
-                            {
-                              method: "POST",
-                              headers: { "Content-Type": "application/json" },
-                              body: selectedFile.hasPassword
-                                ? JSON.stringify({ password })
-                                : null,
-                            }
-                          );
-                          const data = await res.json();
-                          if (data.success) {
-                            window.open(data.file.url, "_blank");
-                            setRecentUploads((prev) =>
-                              prev.map((f) =>
-                                f._id === selectedFile._id
-                                  ? { ...f, downloads: (f.downloads || 0) + 1 }
-                                  : f
-                              )
-                            );
-                            setSelectedFile((prev) =>
-                              prev
-                                ? {
-                                    ...prev,
-                                    downloads: (prev.downloads || 0) + 1,
-                                  }
-                                : prev
-                            );
-                          } else {
-                            toast.error(data.message || "Download Failed");
-                          }
-                        } catch (error) {
-                          toast.error("Download Failed", error);
-                        }
-                      }}
-                      className="w-full"
-                    >
-                      <Download className="w-4 h-4 mr-2" /> Download
-                    </Button>
 
                     {/* Social Share */}
                     <div className="mt-4 w-full text-center">

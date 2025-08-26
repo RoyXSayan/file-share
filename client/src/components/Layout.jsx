@@ -24,8 +24,9 @@ export default function Layout({ children }) {
       {isAuthenticated && <Sidebar open={open} setOpen={setOpen} />}
       {/* Overlays for mobile (click outside to close) */}
       {open && (
-        <div className="fixed inset-0 bg-black/50 z-40 lg:hidden"
-        onClick={() => setOpen(false)}
+        <div
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          onClick={() => setOpen(false)}
         />
       )}
 

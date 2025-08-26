@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { loginUser, signupUser } from "@/api/auth";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
+import { toast, Toaster } from "sonner";
 
 export default function LoginSignup() {
   const [isLogin, setIsLogin] = useState(true);
@@ -25,8 +26,37 @@ export default function LoginSignup() {
     }
   }, [navigate]);
 
+  // ✅ password validation regex
+  const passwordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+
+  const validateForm = () => {
+    if (!formData.email.trim()) {
+      toast.error("Email is required");
+      return false;
+    }
+    if (!formData.password.trim()) {
+      toast.error("Password is required");
+      return false;
+    }
+    if (!isLogin) {
+      if (!formData.username.trim()) {
+        toast.error("Username is required");
+        return false;
+      }
+      if (!passwordRegex.test(formData.password)) {
+        toast.error(
+          "Password must be at least 6 chars, include uppercase, lowercase, number & symbol"
+        );
+        return false;
+      }
+    }
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) return;
     try {
       if (isLogin) {
         const res = await loginUser({
@@ -34,18 +64,22 @@ export default function LoginSignup() {
           password: formData.password,
         });
         login(res.data.user, res.data.token);
+        toast.success("Login Successful");
         navigate("/");
       } else {
         const res = await signupUser(formData);
         if (res.data.user && res.data.token) {
           login(res.data.user, res.data.token);
+          toast.success("Signup Successful Please login");
           navigate("/");
         } else {
+          toast.error("Signup Failed, try again");
           setIsLogin(true);
         }
       }
     } catch (err) {
-      console.error("Error:", err.response?.data || err.message);
+      const errorMsg = err.response?.data?.message || "Something went wrong";
+      toast.error(errorMsg);
     }
   };
 
@@ -59,7 +93,7 @@ export default function LoginSignup() {
             className="text-2xl font-extrabold tracking-tight cursor-pointer"
             onClick={() => navigate("/")}
           >
-            <span className="text-slate-900 dark:text-white">File</span>
+            <span className="text-white">File</span>
             <span className="text-blue-600">Share</span>
           </div>
 
