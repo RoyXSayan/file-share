@@ -10,6 +10,7 @@ import LoginSignup from "./auth/LoginSignup";
 import ProtectedRoute from "./components/ProtectedRoute";
 import LandingPage from "./pages/LandingPage";
 import { useAuth } from "./context/AuthContext";
+import Friends from "./pages/Friends";
 
 export default function App() {
   const { user } = useAuth();
@@ -51,6 +52,14 @@ export default function App() {
                 <FileUpload />
               </Layout>
             </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/friends"
+          element={
+            <Layout>
+              <Friends />
+            </Layout>
           }
         />
       </Routes>

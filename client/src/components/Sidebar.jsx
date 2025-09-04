@@ -1,18 +1,24 @@
 // src/components/Sidebar.jsx
 import { NavLink } from "react-router-dom";
-import { FaHome, FaUpload, FaTachometerAlt, FaCog } from "react-icons/fa";
+import {
+  FaHome,
+  FaUpload,
+  FaTachometerAlt,
+  FaCog,
+  FaUserFriends,
+} from "react-icons/fa";
 import { useAuth } from "@/context/AuthContext";
 
 export default function Sidebar({ open, setOpen }) {
-
   const { user } = useAuth(); // subscribe to context
 
-  if(!user) return null;
-  
+  if (!user) return null;
+
   const links = [
     { to: "/", label: "Home", icon: <FaHome /> },
     { to: "/upload", label: "Upload", icon: <FaUpload /> },
     { to: "/dashboard", label: "Dashboard", icon: <FaTachometerAlt /> },
+    { to: "/friends", label: "Friends", icon: <FaUserFriends /> },
     { to: "/settings", label: "Settings", icon: <FaCog /> },
   ];
 

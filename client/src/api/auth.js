@@ -1,7 +1,8 @@
+import API_BASE_URL from "@/config";
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:5000/api/auth", // adjust to your backend
+  baseURL: `${API_BASE_URL}/api/auth`, // adjust to your backend
 });
 
 // signup API

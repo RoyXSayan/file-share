@@ -11,6 +11,7 @@ import {
 import { FaWhatsapp, FaTelegramPlane, FaLinkedin } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
+import API_BASE_URL from "@/config";
 
 export default function FileUpload() {
   const [file, setFile] = useState(null);
@@ -26,7 +27,7 @@ export default function FileUpload() {
     if (!email) return toast.error("Enter an email address");
 
     try {
-      const res = await fetch("http://localhost:5000/files/send-email", {
+      const res = await fetch(`${API_BASE_URL}/files/send-email`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, fileLink }),
@@ -68,7 +69,7 @@ export default function FileUpload() {
     try {
       const xhr = new XMLHttpRequest();
       const token = localStorage.getItem("token"); //grab the save token
-      xhr.open("POST", "http://localhost:5000/files/upload", true);
+      xhr.open("POST", `${API_BASE_URL}/files/upload`, true);
 
       if (token) {
         xhr.setRequestHeader("Authorization", `Bearer ${token}`);

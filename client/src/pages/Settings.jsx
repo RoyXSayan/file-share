@@ -3,6 +3,7 @@ import { useState, useRef } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Loader2, Pencil, Trash2 } from "lucide-react";
+import API_BASE_URL from "@/config";
 
 export default function Settings() {
   const { user, setUser, logout } = useAuth();
@@ -22,7 +23,7 @@ export default function Settings() {
 
     try {
       setLoading(true);
-      const res = await fetch("http://localhost:5000/api/auth/upload-profile", {
+      const res = await fetch(`${API_BASE_URL}/api/auth/upload-profile`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -48,7 +49,7 @@ export default function Settings() {
       return;
     try {
       setLoading(true);
-      const res = await fetch("http://localhost:5000/api/auth/delete", {
+      const res = await fetch(`${API_BASE_URL}/api/auth/delete`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,

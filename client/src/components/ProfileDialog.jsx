@@ -10,6 +10,7 @@ import {
 import { User, Pencil, Trash2, Loader2 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
+import API_BASE_URL from "@/config";
 
 export default function ProfileDialog() {
   const { user, setUser, logout } = useAuth();
@@ -27,7 +28,7 @@ export default function ProfileDialog() {
 
     try {
       setLoading(true);
-      const res = await fetch("http://localhost:5000/api/auth/upload-profile", {
+      const res = await fetch(`${API_BASE_URL}/api/auth/upload-profile`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -56,7 +57,7 @@ export default function ProfileDialog() {
 
     try {
       setLoading(true);
-      const res = await fetch("http://localhost:5000/api/users/delete", {
+      const res = await fetch(`${API_BASE_URL}/api/users/delete`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,

@@ -24,6 +24,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { Copy } from "lucide-react"; // 👈 add this at the top
+import API_BASE_URL from "@/config";
 
 export default function Dashboard() {
   const [stats, setStats] = useState({
@@ -46,14 +47,14 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const res = await fetch("http://localhost:5000/files/user-stats", {
+        const res = await fetch(`${API_BASE_URL}/files/user-stats`, {
           headers: {
             Authorization: `Bearer ${token}`, // attach token here
           },
         });
         const userData = await res.json();
         // fetch global stats for users + active users
-        const resGlobal = await fetch("http://localhost:5000/api/stats");
+        const resGlobal = await fetch(`${API_BASE_URL}/api/stats`);
         const globalData = await resGlobal.json();
 
         if (userData.success && globalData.success) {
@@ -77,8 +78,8 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchFiles = async () => {
       try {
-        // const res = await fetch("http://localhost:5000/files/uploads");
-        const res = await fetch("http://localhost:5000/files/uploads", {
+        // const res = await fetch("${API_BASE_URL}/files/uploads");
+        const res = await fetch(`${API_BASE_URL}/files/uploads`, {
           headers: {
             Authorization: `Bearer ${token}`, // attach token here
           },
@@ -101,7 +102,7 @@ export default function Dashboard() {
   const handleAccessFile = async () => {
     try {
       const res = await fetch(
-        `http://localhost:5000/files/download/${selectedFile._id}`,
+        `${API_BASE_URL}/files/download/${selectedFile._id}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -127,11 +128,11 @@ export default function Dashboard() {
 
     try {
       // const res = await fetch(
-      //   `http://localhost:5000/files/${selectedFile._id}`,
+      //   `${API_BASE_URL}/files/${selectedFile._id}`,
       //   { method: "DELETE" }
       // );
       const res = await fetch(
-        `http://localhost:5000/files/${selectedFile._id}`,
+        `${API_BASE_URL}/files/${selectedFile._id}`,
         {
           method: "DELETE",
           headers: {
@@ -161,7 +162,7 @@ export default function Dashboard() {
 
     try {
       // const res = await fetch(
-      //   `http://localhost:5000/files/${selectedFile._id}/rename`,
+      //   `${API_BASE_URL}/files/${selectedFile._id}/rename`,
       //   {
       //     method: "PUT",
       //     headers: { "Content-Type": "application/json" },
@@ -170,7 +171,7 @@ export default function Dashboard() {
       // );
 
       const res = await fetch(
-        `http://localhost:5000/files/${selectedFile._id}/rename`,
+        `${API_BASE_URL}/files/${selectedFile._id}/rename`,
         {
           method: "PUT",
           headers: {
@@ -427,7 +428,7 @@ export default function Dashboard() {
                     onClick={async () => {
                       try {
                         const res = await fetch(
-                          `http://localhost:5000/files/download/${selectedFile._id}`,
+                          `${API_BASE_URL}/files/download/${selectedFile._id}`,
                           {
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
